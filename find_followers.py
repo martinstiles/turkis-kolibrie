@@ -16,7 +16,7 @@ SCREEN_NAMES = [
 ]
 BEARER_TOKEN = os.environ.get("TWITTER_BEARER")
 HEADERS = {"Authorization": "Bearer {}".format(BEARER_TOKEN)}
-COUNT = 10
+COUNT = 5000
 BASE_URL = "https://api.twitter.com/1.1/followers/ids.json?count=" + str(COUNT) + "&screen_name="
 
 def get_url(party_name):
@@ -42,14 +42,31 @@ def save_followers(party_name, json_response):
             file.write(str(id) + "\n")
 
 def main():
+    iterations = 0
     for party_name in SCREEN_NAMES:
-        url = get_url(party_name)
-        json_response = connect_to_endpoint(url, HEADERS)
-        save_followers(party_name, json_response)
-        print("#################################")
-        print("Followers for %s saved successfully" % party_name, COUNT)
-        print("")
+        next_cursor = ""
+        while True:
+            url = get_url(party_name)
+            if next_cursor:
+                url += "&cursor=" + next_cursor
+                # print(url)
+            json_response = connect_to_endpoint(url, HEADERS)
+            # print(json_response)
+            next_cursor = json_response["next_cursor_str"]
+            save_followers(party_name, json_response)
+
+            print("#################################")
+            print("Followers for %s saved successfully" % party_name, COUNT)
+            print("")
+
+            iterations += 1
+            if iterations >= 1:  # 1 iteration
+                break
+        
+        # Save next_cursor
+        with open("%s/data/parties/cursors.txt" % PATH, "a") as file:
+            file.write(party_name + "," + next_cursor)
+
 
 if __name__ == "__main__":
     main()
-
