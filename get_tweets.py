@@ -49,11 +49,14 @@ def get_user_ids(filename):
             user_ids.append(user_id)
     return user_ids
 
-def get_responses(user_ids):
+def get_responses(filename, user_ids):
     """
     Send requests to retrieve tweets from every user in user_ids[].
     Requests may not be longer than 512 characters.
     """
+    current_party = filename[:-4]  # Remove ".txt"
+    print("Retrieving for tweets for:", current_party)
+
     responses = []
     next_token = ""
     query = BASE_QUERY + "from%3A" + str(user_ids[0])
@@ -79,9 +82,8 @@ def get_responses(user_ids):
     response_json = get_response(query, next_token)
     responses.append(response_json)
 
-    # DEBUG
+    # Feedback
     print("Number of responses:", len(responses))
-    # print(responses)
     print("Number of user_ids:", len(user_ids))
 
     return responses
@@ -90,6 +92,7 @@ def save_tweets(filename, responses):
     """
     For every response: save tweets as one line in correct text file
     """
+    current_party = filename[:-4]  # Remove ".txt"
     for response in responses:
         try:
             data = response["data"]
@@ -101,13 +104,18 @@ def save_tweets(filename, responses):
         except Exception:
             # Response has no data field
             pass
+    
+    print("#########################################")
+    print("Followers for %s saved successfully" % current_party)
+    print("")
 
-def update_counts(current_party, user_ids):
+def update_counts(filename, user_ids):
     """
     Update the number of users read for every party
     """
     party_to_count_map = {}
     current_count = len(user_ids)
+    current_party = filename[:-4]  # Remove ".txt"
 
     # Read previous count for every party
     with open("%s/data/tweets/counts.txt" % PATH, "r") as file:
@@ -118,15 +126,13 @@ def update_counts(current_party, user_ids):
             party_name, count = stripped_line.split(',')
             party_to_count_map[party_name] = int(count)
     
-    print("Count of %s before: %s" % (current_party, party_to_count_map[current_party]))
-    
     # Update current party count
     if current_party in party_to_count_map:
         party_to_count_map[current_party] += current_count
     else:
         party_to_count_map[current_party] = current_count
     
-    print("Count of %s after: %s" % (current_party, party_to_count_map[current_party]))
+    print("New count of %s: %s" % (current_party, party_to_count_map[current_party]))
 
     # Save number of user_ids read for each party file:
     with open("%s/data/tweets/counts.txt" % PATH, "w") as file:
@@ -135,27 +141,21 @@ def update_counts(current_party, user_ids):
 
 def main():
     for filename in os.listdir(PATH + "/data/parties"):
-        current_party = filename[:-4]  # Remove ".txt"
+        if filename != "Hoyre.txt": #filename in ["Arbeiderpartiet.txt", "cursors.txt"]:
+            print("OHHHHH NO!!!", filename)
+            continue
 
         user_ids = get_user_ids(filename)
         # NB! Arbeiderpartiet is DONE!
         # Reduce set to save tweets in batches:
-        user_ids = user_ids[:1000]
-        # user_ids = user_ids[1000:2000]
-        # user_ids = user_ids[2000:3000]
-        # user_ids = user_ids[3000:4000]
-        # user_ids = user_ids[4000:]
+        # previous: user_ids = user_ids[500:1000]
+        user_ids = user_ids[1000:1500]
 
-        responses = get_responses(user_ids)
+        responses = get_responses(filename, user_ids)
 
         save_tweets(filename, responses)
 
-        update_counts(current_party, user_ids)
-
-        print("#########################################")
-        print("Followers for %s saved successfully" % current_party)
-        print("")
-        break
+        update_counts(filename, user_ids)
 
 
 if __name__ == "__main__":
