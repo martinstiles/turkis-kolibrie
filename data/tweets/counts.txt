@@ -1,1 +1,9 @@
 Arbeiderpartiet,5000
+Raudt,1000
+Partiet,1000
+Senterpartiet,1000
+SVparti,1000
+Venstre,1000
+KrFNorge,1000
+frp_no,1000
+Hoyre,1000
