@@ -107,7 +107,6 @@ def save_tweets(filename, responses):
     
     print("#########################################")
     print("Followers for %s saved successfully" % current_party)
-    print("")
 
 def update_counts(filename, user_ids):
     """
@@ -139,23 +138,38 @@ def update_counts(filename, user_ids):
         for party, count in party_to_count_map.items():
             file.write(party + "," + str(count) + "\n")
 
+parties_to_skip = [
+    "cursors",
+    "Arbeiderpartiet",
+    "Hoyre",
+    "SVparti",
+    "Venstre",
+    "Partiet",
+    "Raudt",
+    "frp_no",
+    "KrFNorge",
+    "Senterpartiet"
+]
+
 def main():
     for filename in os.listdir(PATH + "/data/parties"):
-        if filename != "Hoyre.txt": #filename in ["Arbeiderpartiet.txt", "cursors.txt"]:
+        if filename[:-4] in parties_to_skip:
             print("OHHHHH NO!!!", filename)
             continue
 
         user_ids = get_user_ids(filename)
         # NB! Arbeiderpartiet is DONE!
         # Reduce set to save tweets in batches:
-        # previous: user_ids = user_ids[500:1000]
-        user_ids = user_ids[1000:1500]
+        # previous: user_ids = user_ids[3500:4000]
+        # user_ids = user_ids[4500:]
 
         responses = get_responses(filename, user_ids)
 
         save_tweets(filename, responses)
 
         update_counts(filename, user_ids)
+
+        print("")
 
 
 if __name__ == "__main__":
