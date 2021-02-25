@@ -139,12 +139,12 @@ def main():
 
         user_ids = get_user_ids(filename)
         # NB! Arbeiderpartiet is DONE!
-        # Reduce set to save tweets in batches
+        # Reduce set to save tweets in batches:
         user_ids = user_ids[:1000]
-        user_ids = user_ids[1000:2000]
-        user_ids = user_ids[2000:3000]
-        user_ids = user_ids[3000:4000]
-        user_ids = user_ids[4000:]
+        # user_ids = user_ids[1000:2000]
+        # user_ids = user_ids[2000:3000]
+        # user_ids = user_ids[3000:4000]
+        # user_ids = user_ids[4000:]
 
         responses = get_responses(user_ids)
 
