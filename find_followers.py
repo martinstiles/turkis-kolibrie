@@ -42,8 +42,10 @@ def save_followers(party_name, json_response):
             file.write(str(id) + "\n")
 
 def main():
+    # TODO: Retrieve next cursor from /data/parties/cursors.txt before running
     iterations = 0
     for party_name in SCREEN_NAMES:
+        # TODO: Assert next cursor if it exists in cursors.txt
         next_cursor = ""
         while True:
             url = get_url(party_name)
@@ -65,7 +67,7 @@ def main():
         
         # Save next_cursor
         with open("%s/data/parties/cursors.txt" % PATH, "a") as file:
-            file.write(party_name + "," + next_cursor)
+            file.write(party_name + "," + next_cursor + "\n")
 
 
 if __name__ == "__main__":
