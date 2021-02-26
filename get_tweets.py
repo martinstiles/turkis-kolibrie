@@ -158,9 +158,7 @@ def main():
             continue
 
         user_ids = get_user_ids(filename)
-        # NB! Arbeiderpartiet is DONE!
         # Reduce set to save tweets in batches:
-        # previous: user_ids = user_ids[3500:4000]
         # user_ids = user_ids[4500:]
 
         responses = get_responses(filename, user_ids)
