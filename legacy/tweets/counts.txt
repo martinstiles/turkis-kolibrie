@@ -7,3 +7,4 @@ Venstre,5000
 KrFNorge,5000
 frp_no,5000
 Hoyre,5000
+test,100

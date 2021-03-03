@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 PATH = os.path.dirname(__file__)
 
@@ -34,40 +35,50 @@ def connect_to_endpoint(url, headers):
     return response.json()
 
 def save_followers(party_name, json_response):
-    # TODO: Use next_cursor
     ids = json_response["ids"]
     print("Size of ids:", len(ids))
     with open("%s/data/parties/%s.txt" % (PATH, party_name), "a") as file:
         for id in ids:
             file.write(str(id) + "\n")
 
+def get_cursor(party_name):
+    with open(PATH + "/data/parties/cursors.json") as file:
+        cursors = json.load(file)
+        return cursors[party_name]
+
+
+def save_cursor(party_name, new_cursor):
+    with open(PATH + "/data/parties/cursors.json") as file:
+        cursors = json.load(file)
+
+    cursors[party_name] = new_cursor
+
+    with open(PATH + "/data/parties/cursors.json", "w") as file:
+        json.dump(cursors, file, indent=4, sort_keys=True)
+
+
 def main():
-    # TODO: Retrieve next cursor from /data/parties/cursors.txt before running
     iterations = 0
     for party_name in SCREEN_NAMES:
-        # TODO: Assert next cursor if it exists in cursors.txt
-        next_cursor = ""
-        while True:
-            url = get_url(party_name)
-            if next_cursor:
-                url += "&cursor=" + next_cursor
-                # print(url)
-            json_response = connect_to_endpoint(url, HEADERS)
-            # print(json_response)
-            next_cursor = json_response["next_cursor_str"]
-            save_followers(party_name, json_response)
+        next_cursor = get_cursor(party_name)
+        if next_cursor == 0:
+            continue
+        
+        url = get_url(party_name)
+        if next_cursor:
+            url += "&cursor=" + next_cursor
 
-            print("#################################")
-            print("Followers for %s saved successfully" % party_name, COUNT)
-            print("")
+        json_response = connect_to_endpoint(url, HEADERS)
+        next_cursor = json_response["next_cursor_str"]
 
-            iterations += 1
-            if iterations >= 1:  # 1 iteration
-                break
+        save_followers(party_name, json_response)
+
+        print("#################################")
+        print("Followers for %s saved successfully" % party_name, COUNT)
+        print("")
         
         # Save next_cursor
-        with open("%s/data/parties/cursors.txt" % PATH, "a") as file:
-            file.write(party_name + "," + next_cursor + "\n")
+        save_cursor(party_name, next_cursor)
 
 
 if __name__ == "__main__":

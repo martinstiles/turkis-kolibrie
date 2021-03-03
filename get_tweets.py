@@ -4,20 +4,17 @@ import json
 import datetime
 
 
-
 PATH = os.path.dirname(__file__)
 TODAY = datetime.date.today()
 WEEK_NR = datetime.date(TODAY.year, TODAY.month, TODAY.day).isocalendar()[1]
 BEARER_TOKEN = os.environ.get("TWITTER_BEARER")
 HEADERS = {"Authorization": "Bearer {}".format(BEARER_TOKEN)}
 COUNT = 100
-BASE_URL = "https://api.twitter.com/2/tweets/search/recent?user.fields=id&max_results=" + str(COUNT)
+BASE_URL = "https://api.twitter.com/2/tweets/search/recent?max_results=" + str(COUNT) + "&tweet.fields=author_id,public_metrics,referenced_tweets"
 BASE_QUERY = "&query=lang%3Ano%20%28"
-
 
 def query_url(query):
     return BASE_URL + query
-
 
 def connect_to_endpoint(url, headers):
     response = requests.request("GET", url, headers=headers)
@@ -29,9 +26,7 @@ def connect_to_endpoint(url, headers):
         )
     return response.json()
 
-
 def get_response(query, next_token):
-    # TODO: retrieve user_id too?
     url = query_url(query + "%29")
     if next_token:
         url += "next_token=" + next_token
@@ -67,6 +62,8 @@ def get_responses(filename, user_ids):
             response_json = get_response(query, next_token)
             responses.append(response_json)
             query = BASE_QUERY + "from%3A" + str(user_id)
+            # TODO: THIS AINT WORKING -> FIX next_token IMPLEMENTATION
+            # MAYBE: while next_token != 0: 
             try:
                 # Save next_token if it exists in response
                 next_token = response_json["meta"]["next_token"]
@@ -80,6 +77,7 @@ def get_responses(filename, user_ids):
         c += 1
     # Remaining batch:
     response_json = get_response(query, next_token)
+    print(response_json)
     responses.append(response_json)
 
     # Feedback
@@ -94,16 +92,15 @@ def save_tweets(filename, responses):
     """
     current_party = filename[:-4]  # Remove ".txt"
     for response in responses:
-        try:
-            data = response["data"]
-            for ob in data:
-                text = ob["text"]
-                stripped_text = text.replace("\n", "")
-                with open(PATH + "/data/tweets/" + filename, "a") as file:
-                    file.write(stripped_text + "\n")
-        except Exception:
-            # Response has no data field
-            pass
+        tweets = response["data"]
+        for tweet in tweets:
+            try:
+                tweet_id = tweet["id"]
+                with open(PATH + "/data/tweets/" + current_party + "/" + tweet_id + ".json", "a") as file:
+                    print("Saving file to: " + "/data/tweets/" + current_party + "/" + tweet_id + ".json")
+                    json.dump(tweet, file, indent=4, sort_keys=True)
+            except KeyError as e:
+                print(e)
     
     print("#########################################")
     print("Followers for %s saved successfully" % current_party)
@@ -137,6 +134,11 @@ def update_counts(filename, user_ids):
     with open("%s/data/tweets/counts.txt" % PATH, "w") as file:
         for party, count in party_to_count_map.items():
             file.write(party + "," + str(count) + "\n")
+
+def check_duplicates(temp):
+    # TODO: Make a method to check if the user id has already been added
+    # SHOULD probably have a dictionary: userId -> tweetIds[]
+    pass
 
 parties_to_skip = [
     "cursors",
@@ -172,3 +174,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""
+* text
+* id
+* public_metrics
+    * retweet_count
+    * reply_count
+    * like_count
+    * quote_count
+* author_id
+"""
