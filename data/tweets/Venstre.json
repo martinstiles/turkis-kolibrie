@@ -1487,6 +1487,22 @@
         ],
         "text": "@DagBoee Jeg mener det jeg skrev: At Oslo er underlagt de klart hardeste restriksjonene i Norge. Om du ikke \u00abdeler den definisjonen\u00bb forklarer det jo en hel del."
     },
+    "1365786398675136519": {
+        "author_id": "1350939433797869568",
+        "public_metrics": {
+            "like_count": 0,
+            "quote_count": 0,
+            "reply_count": 0,
+            "retweet_count": 518
+        },
+        "referenced_tweets": [
+            {
+                "id": "1365347798972063744",
+                "type": "retweeted"
+            }
+        ],
+        "text": "RT @haavsand99: Oversikt over hvor mange som har d\u00f8dd for at vi skal kose oss med fotball-VM i Qatar 2022:\n\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\ud83d\udc77\u200d\u2642\ufe0f\u2026"
+    },
     "1365793881699340290": {
         "author_id": "1351965595231776768",
         "public_metrics": {
@@ -2586,6 +2602,22 @@
             }
         ],
         "text": "Rystende forklaringer i h\u00f8ringen om stormingen: \u2013 De var forberedt p\u00e5 krig. \nhttps://t.co/AauzYFzth1"
+    },
+    "1366292342949502976": {
+        "author_id": "1350939433797869568",
+        "public_metrics": {
+            "like_count": 0,
+            "quote_count": 0,
+            "reply_count": 0,
+            "retweet_count": 345
+        },
+        "referenced_tweets": [
+            {
+                "id": "1365990652161511426",
+                "type": "retweeted"
+            }
+        ],
+        "text": "RT @Frankohansen: Fakta Molde kommune - Bydel Stovner:\n\nInnbyggere Molde: 31.870\nInnbyggere Stovner: 32.839\n\nAreal Molde: 1503 km2\nAreal St\u2026"
     },
     "1366295107436245001": {
         "author_id": "516048585",
@@ -5054,6 +5086,32 @@
             }
         ],
         "text": "@kariekas Regner det som oppryddet n\u00e5r hun med tydelig r\u00f8st sier at hun ikke \"ville brukt akkurat de ordene\"."
+    },
+    "1366804531724644353": {
+        "author_id": "1112636000562565120",
+        "public_metrics": {
+            "like_count": 2,
+            "quote_count": 0,
+            "reply_count": 0,
+            "retweet_count": 0
+        },
+        "referenced_tweets": [
+            {
+                "id": "1366751918077448198",
+                "type": "replied_to"
+            }
+        ],
+        "text": "@ElinHege Kondolerer s\u00e5 mye\u2764 er trist at folk sprer s\u00e5 mye feil info om covid-19 og vaksina."
+    },
+    "1366806283953831943": {
+        "author_id": "1112636000562565120",
+        "public_metrics": {
+            "like_count": 0,
+            "quote_count": 0,
+            "reply_count": 0,
+            "retweet_count": 0
+        },
+        "text": "Noe som irriterer meg, er folk som sprer feil informasjon som kan skade mange liv. Eks folk som sprer falske ting om covid-19 vaksina, som gj\u00f8r at folk ikke t\u00f8r \u00e5 ta den. 1 rykte: at det er en datashipp for \u00e5 overv\u00e5ke folk. #stop #lies #COVID19Vaccine #COVID19"
     },
     "1366813179477688320": {
         "author_id": "33659846",

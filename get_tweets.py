@@ -94,7 +94,6 @@ def save_tweets(filename, responses):
     # Load json file into a dictionary
     with open(PATH + "/data/tweets/" + current_party + ".json", "r") as file:
         tweets = json.load(file)
-    # tweets = {}
 
     # Add new tweets to the dictionary
     new_tweets_dict = {}
@@ -172,8 +171,8 @@ def main():
 
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
-        # previous run: [:500]
-        user_ids = user_ids[500:1000]
+        # previous run: [:520]
+        user_ids = user_ids[520:1000]
 
         responses = get_responses(filename, user_ids)
 
