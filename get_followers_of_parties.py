@@ -61,7 +61,7 @@ def main():
     iterations = 0
     for party_name in SCREEN_NAMES:
         next_cursor = get_cursor(party_name)
-        if next_cursor == 0:
+        if next_cursor == 0 or next_cursor == "0":
             continue
         
         url = get_url(party_name)
