@@ -62,7 +62,11 @@ def main():
     for party_name in SCREEN_NAMES:
         next_cursor = get_cursor(party_name)
         if next_cursor == 0 or next_cursor == "0":
-            continue
+            print("YESSS DUDE")
+            return
+        else:
+            print("NOOOOOOO")
+            return
         
         url = get_url(party_name)
         if next_cursor:
