@@ -1,0 +1,9 @@
+Arbeiderpartiet,500
+Raudt,500
+Partiet,500
+Senterpartiet,500
+SVparti,500
+Venstre,500
+KrFNorge,500
+frp_no,500
+Hoyre,500
