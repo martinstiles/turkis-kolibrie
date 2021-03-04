@@ -10,10 +10,10 @@ SCREEN_NAMES = [
     "SVparti",
     "Venstre",
     "Partiet",
-    "Raudt",
+    # "Raudt", # DONE
     # "frp_no", # DONE
-    "KrFNorge",
-    "Senterpartiet"
+    # "KrFNorge", # DONE
+    # "Senterpartiet" # DONE
 ]
 BEARER_TOKEN = os.environ.get("TWITTER_BEARER")
 HEADERS = {"Authorization": "Bearer {}".format(BEARER_TOKEN)}
@@ -59,15 +59,8 @@ def save_cursor(party_name, new_cursor):
 
 def main():
     for party_name in SCREEN_NAMES:
-        next_cursor = get_cursor(party_name)
-        if next_cursor == "0":
-            print("YESSS DUDE")
-            return
-        else:
-            print("NOOOOOOO")
-            return
-        
         url = get_url(party_name)
+        next_cursor = get_cursor(party_name)
         if next_cursor:
             url += "&cursor=" + next_cursor
 
@@ -77,7 +70,7 @@ def main():
         save_followers(party_name, json_response)
 
         print("#################################")
-        print("Followers for %s saved successfully" % party_name, COUNT)
+        print("Followers for %s saved successfully" % party_name)
         print("")
         
         # Save next_cursor
