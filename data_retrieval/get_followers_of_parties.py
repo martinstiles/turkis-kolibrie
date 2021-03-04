@@ -11,7 +11,7 @@ SCREEN_NAMES = [
     "Venstre",
     "Partiet",
     "Raudt",
-    "frp_no",
+    # "frp_no", # DONE
     "KrFNorge",
     "Senterpartiet"
 ]
@@ -58,10 +58,9 @@ def save_cursor(party_name, new_cursor):
 
 
 def main():
-    iterations = 0
     for party_name in SCREEN_NAMES:
         next_cursor = get_cursor(party_name)
-        if next_cursor == 0 or next_cursor == "0":
+        if next_cursor == "0":
             print("YESSS DUDE")
             return
         else:
