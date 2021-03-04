@@ -77,7 +77,6 @@ def get_responses(filename, user_ids):
         c += 1
     # Remaining batch:
     response_json = get_response(query, next_token)
-    print(response_json)
     responses.append(response_json)
 
     # Feedback
@@ -91,16 +90,28 @@ def save_tweets(filename, responses):
     For every response: save tweets as one line in correct text file
     """
     current_party = filename[:-4]  # Remove ".txt"
+
+    # Load json file into a dictionary
+    with open(PATH + "/data/tweets/" + current_party + ".json", "r") as file:
+        tweets = json.load(file)
+    # tweets = {}
+
+    # Add new tweets to the dictionary
+    new_tweets_dict = {}
     for response in responses:
-        tweets = response["data"]
-        for tweet in tweets:
-            try:
-                tweet_id = tweet["id"]
-                with open(PATH + "/data/tweets/" + current_party + "/" + tweet_id + ".json", "a") as file:
-                    print("Saving file to: " + "/data/tweets/" + current_party + "/" + tweet_id + ".json")
-                    json.dump(tweet, file, indent=4, sort_keys=True)
-            except KeyError as e:
-                print(e)
+        try:
+            new_tweets_list = response["data"]
+            for tweet_obj in new_tweets_list:
+                tweet_id = tweet_obj["id"]
+                del tweet_obj["id"]
+                new_tweets_dict[tweet_id] = tweet_obj # tweet object without id
+        except KeyError as e:
+            print("KeyError:", e)
+    tweets.update(new_tweets_dict)
+
+    # Write the dictionary back to json file
+    with open(PATH + "/data/tweets/" + current_party + ".json", "w") as file:
+        json.dump(tweets, file, indent=4, sort_keys=True)
     
     print("#########################################")
     print("Followers for %s saved successfully" % current_party)
@@ -141,27 +152,28 @@ def check_duplicates(temp):
     pass
 
 parties_to_skip = [
-    "cursors",
-    "Arbeiderpartiet",
-    "Hoyre",
-    "SVparti",
-    "Venstre",
-    "Partiet",
-    "Raudt",
-    "frp_no",
-    "KrFNorge",
-    "Senterpartiet"
+    "cursors", # Kan fjernes? (ref. :170)
+    # "Arbeiderpartiet",
+    # "Hoyre",
+    # "SVparti",
+    # "Venstre",
+    # "Partiet",
+    # "Raudt",
+    # "frp_no",
+    # "KrFNorge",
+    # "Senterpartiet"
 ]
 
 def main():
     for filename in os.listdir(PATH + "/data/parties"):
-        if filename[:-4] in parties_to_skip:
+        if filename[:-4] in parties_to_skip or filename == "cursors.json":
             print("OHHHHH NO!!!", filename)
             continue
 
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
-        # user_ids = user_ids[4500:]
+        # previous run: [:500]
+        user_ids = user_ids[500:1000]
 
         responses = get_responses(filename, user_ids)
 
