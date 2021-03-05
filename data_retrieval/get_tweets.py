@@ -62,8 +62,8 @@ def get_responses(filename, user_ids):
             response_json = get_response(query, next_token)
             responses.append(response_json)
             query = BASE_QUERY + "from%3A" + str(user_id)
-            # TODO: THIS AINT WORKING -> FIX next_token IMPLEMENTATION
-            # MAYBE: while next_token != 0: 
+            # TODO: THIS AINT WORKING -> FIX next_token IMPLEMENTATION --> MAYBE: while next_token != 0: 
+            # IS IT NECESSARY THO? We will at worst lose a few tweets from users we have already gotten some tweets from
             try:
                 # Save next_token if it exists in response
                 next_token = response_json["meta"]["next_token"]
@@ -109,6 +109,7 @@ def save_tweets(filename, responses):
     tweets.update(new_tweets_dict)
 
     # Write the dictionary back to json file
+    # TODO: add week nr to directory (rememer to update load etc.)
     with open(PATH + "/data/tweets/" + current_party + ".json", "w") as file:
         json.dump(tweets, file, indent=4, sort_keys=True)
     
@@ -151,7 +152,6 @@ def check_duplicates(temp):
     pass
 
 parties_to_skip = [
-    "cursors", # Kan fjernes? (ref. :170)
     # "Arbeiderpartiet",
     # "Hoyre",
     # "SVparti",
@@ -171,8 +171,8 @@ def main():
 
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
-        # previous run: [:520]
-        user_ids = user_ids[520:1100]
+        # previous run: [:6000]
+        user_ids = user_ids[5300:6000] # timestamp: 23:07
 
         responses = get_responses(filename, user_ids)
 
