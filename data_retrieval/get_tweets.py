@@ -171,8 +171,8 @@ def main():
 
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
-        # previous run: [:6000]
-        user_ids = user_ids[5300:6000] # timestamp: 23:07
+        # previous run: [:15000]
+        user_ids = user_ids[15000:15700] # timestamp: 23:07
 
         responses = get_responses(filename, user_ids)
 
