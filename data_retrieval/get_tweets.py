@@ -53,35 +53,30 @@ def get_responses(filename, user_ids):
     print("Retrieving for tweets for:", current_party)
 
     responses = []
-    next_token = ""
     query = BASE_QUERY + "from%3A" + str(user_ids[0])
-    c = 1
+    counter = 1
     for user_id in user_ids[1:]:
         new_user = "%20OR%20from%3A" + str(user_id)
         if len(query) + len(new_user) > 480:
-            response_json = get_response(query, next_token)
-            responses.append(response_json)
+            next_token = ""
+            while next_token is not None:
+                response_json = get_response(query, next_token)
+                responses.append(response_json)
+                try:
+                    # Save next_token if it exists in response
+                    next_token = response_json["meta"]["next_token"]
+                except Exception:
+                    # Reset next_token if it does not exist
+                    next_token = None
             query = BASE_QUERY + "from%3A" + str(user_id)
-            # TODO: THIS AINT WORKING -> FIX next_token IMPLEMENTATION --> MAYBE: while next_token != 0: 
-            # IS IT NECESSARY THO? We will at worst lose a few tweets from users we have already gotten some tweets from
-            try:
-                # Save next_token if it exists in response
-                next_token = response_json["meta"]["next_token"]
-            except Exception:
-                # Reset next_token if it does not exist
-                next_token = ""
         else:
             query += new_user
         # PRINT PROGRESS
-        print("%s / %s" % (c, len(user_ids)))
-        c += 1
+        print("%s / %s" % (counter, len(user_ids)))
+        counter += 1
     # Remaining batch:
     response_json = get_response(query, next_token)
     responses.append(response_json)
-
-    # Feedback
-    print("Number of responses:", len(responses))
-    print("Number of user_ids:", len(user_ids))
 
     return responses
 
@@ -105,7 +100,7 @@ def save_tweets(filename, responses):
                 del tweet_obj["id"]
                 new_tweets_dict[tweet_id] = tweet_obj # tweet object without id
         except KeyError as e:
-            print("KeyError:", e)
+            pass
     tweets.update(new_tweets_dict)
 
     # Write the dictionary back to json file
@@ -172,7 +167,7 @@ def main():
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
         # previous run: [:15000]
-        user_ids = user_ids[15000:15700] # timestamp: 23:07
+        user_ids = user_ids[16400:17100]
 
         responses = get_responses(filename, user_ids)
 

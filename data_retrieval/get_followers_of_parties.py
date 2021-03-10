@@ -5,11 +5,11 @@ import json
 PATH = os.path.dirname(__file__)
 
 SCREEN_NAMES = [
-    "Arbeiderpartiet",
-    "Hoyre",
-    "SVparti",
-    "Venstre",
-    "Partiet",
+    # "Arbeiderpartiet",
+    # "Hoyre",
+    # "SVparti", # DONE
+    # "Venstre",
+    # "Partiet", # DONE
     # "Raudt", # DONE
     # "frp_no", # DONE
     # "KrFNorge", # DONE
