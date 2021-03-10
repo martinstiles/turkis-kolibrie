@@ -1,0 +1,9 @@
+Arbeiderpartiet,15000
+Raudt,15000
+Partiet,15000
+Senterpartiet,15000
+SVparti,15000
+Venstre,15000
+KrFNorge,15000
+frp_no,15000
+Hoyre,15000
