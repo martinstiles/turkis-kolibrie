@@ -1,3 +1,8 @@
 .DS_Store
 
 .vscode
+
+pyvenv.cfg
+Lib/
+Scripts/
+.idea/
