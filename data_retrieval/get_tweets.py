@@ -153,7 +153,7 @@ parties_to_skip = [
     # "Venstre",
     # "Partiet",
     # "Raudt",
-    # "frp_no",
+    "frp_no",
     # "KrFNorge",
     # "Senterpartiet"
 ]
@@ -167,7 +167,7 @@ def main():
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
         # previous run: [:15000]
-        user_ids = user_ids[16400:17100]
+        user_ids = user_ids[17100:17800]
 
         responses = get_responses(filename, user_ids)
 
