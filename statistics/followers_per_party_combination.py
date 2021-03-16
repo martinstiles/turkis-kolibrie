@@ -51,14 +51,5 @@ for party1 in followers:
             else:
                 counts[parties_string] = 1
 
-print(counts)
-total = 0
-delete_queue = []
-for parties_string in counts:
-    total += counts[parties_string]
-
-counts = {parties_string: counts[parties_string] for parties_string in counts if counts[parties_string] >= 20}
 
 print(counts)
-
-print(total)
