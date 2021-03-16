@@ -1,9 +1,9 @@
-Arbeiderpartiet,17800
-Raudt,17800
-Partiet,17800
-Senterpartiet,17800
-SVparti,17800
-Venstre,17800
-KrFNorge,17800
+Arbeiderpartiet,20600
+Raudt,20600
+Partiet,20600
+Senterpartiet,20600
+SVparti,20600
+Venstre,20600
+KrFNorge,20600
 frp_no,16955
-Hoyre,17800
+Hoyre,20600
