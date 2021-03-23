@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from sentiment import translate_and_analyze
+from sentiment import analyze
 from topic import TopicClassifier
 import pickle
 import numpy as np
@@ -10,19 +10,19 @@ from tqdm import tqdm
 def add_sentiment(df):
     for i in tqdm(range(df.shape[0])):
         index = df.index[i]
-        vader = translate_and_analyze(df.at[index, "text"])
-        df.at[index,'vader'] = vader
+        vader = analyze(df.at[index, "text"])
+        df.at[index, 'vader'] = vader
     return df
 
 
 def add_topic(df):
     # Finne ordboken som matcher best
     # Returnere key til ordboken som matcher best
-    df["topic"] = df["text"].apply(topicclassifier.classify_topic)
+    df["topic"] = df["text"].apply(topic_classifier.classify_topic)
     return df
 
 # create map from user to parties
-path = "data_retrieval/data/parties/"
+path = "../data_retrieval/data/parties/"
 files = os.listdir(path)
 files.remove("cursors.json")
 map_user_party = {}
@@ -44,31 +44,32 @@ for key, value in map_user_party.items():
         map_user_party[key][index] = 1
 
 
-path = "feature_extraction/clean/"
+path = "../feature_extraction/clean/"
 files = os.listdir(path)
-topicclassifier = TopicClassifier()
+topic_classifier = TopicClassifier()
+sentiment_analyzer = SentimentAnalyzer()
 final_df = pd.DataFrame()
 for file in files:
     print(files)
-    df = pd.read_csv(os.path.join(path,file), delimiter=",")
+    df = pd.read_csv(os.path.join(path, file), delimiter=",")
     df = add_sentiment(df)
     df = add_topic(df)
     final_df = pd.concat([final_df, df], ignore_index=True)
 final_df = final_df.drop_duplicates(subset=final_df.columns, keep="first")
-
+final_df.to_csv('final_df.csv', index=True)
 topics = final_df["topic"].unique()
-ids = final_df["user"].unique()
+ids = final_df["author_id"].unique()
 
-features = pd.DataFrame(columns = ["user"] + list(topics))
-features["user"] = ids
+features = pd.DataFrame(columns=["author_id"] + list(topics))
+features["author_id"] = ids
 for topic in topics:
     features[topic] = 0
 
-features = features.set_index("user")
-final_df = final_df.set_index("user")
+features = features.set_index("author_id")
+final_df = final_df.set_index("author_id")
 
-for i, row in final_df.iterrows(): # loops through all the indices and rows
-    features.loc[i, row["topic"]] += row["vader"] # updates the topic feature for user i with the vader value in this row
+for i, row in final_df.iterrows():  # loops through all the indices and rows
+    features.loc[i, row["topic"]] += row["vader"]  # updates the topic feature for user i with the vader value in this row
 
 targets = pd.Series(data=map_user_party)
 print(targets)
