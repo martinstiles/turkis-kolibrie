@@ -47,7 +47,6 @@ for key, value in map_user_party.items():
 path = "../feature_extraction/clean/"
 files = os.listdir(path)
 topic_classifier = TopicClassifier()
-sentiment_analyzer = SentimentAnalyzer()
 final_df = pd.DataFrame()
 for file in files:
     print(files)
