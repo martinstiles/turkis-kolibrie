@@ -5,10 +5,13 @@ from topic import TopicClassifier
 import pickle
 import numpy as np
 import time
-
+from tqdm import tqdm
 
 def add_sentiment(df):
-    df["vader"] = df["text"].apply(translate_and_analyze)
+    for i in tqdm(range(df.shape[0])):
+        index = df.index[i]
+        vader = translate_and_analyze(df.at[index, "text"])
+        df.at[index,'vader'] = vader
     return df
 
 
@@ -19,8 +22,9 @@ def add_topic(df):
     return df
 
 # create map from user to parties
-path = "data/testusers/"
+path = "data_retrieval/data/parties/"
 files = os.listdir(path)
+files.remove("cursors.json")
 map_user_party = {}
 count = 0
 for i, file in enumerate(files):
@@ -39,13 +43,14 @@ for key, value in map_user_party.items():
     for index in value:
         map_user_party[key][index] = 1
 
-# read all texts from the nrk valgomat
-path = "data/testtweets/"
+
+path = "feature_extraction/clean/"
 files = os.listdir(path)
 topicclassifier = TopicClassifier()
 final_df = pd.DataFrame()
 for file in files:
-    df = pd.read_csv(os.path.join(path,file), delimiter=";")
+    print(files)
+    df = pd.read_csv(os.path.join(path,file), delimiter=",")
     df = add_sentiment(df)
     df = add_topic(df)
     final_df = pd.concat([final_df, df], ignore_index=True)
@@ -66,11 +71,12 @@ for i, row in final_df.iterrows(): # loops through all the indices and rows
     features.loc[i, row["topic"]] += row["vader"] # updates the topic feature for user i with the vader value in this row
 
 targets = pd.Series(data=map_user_party)
+print(targets)
 features["target"] = targets
 
-print(features.head(10))
 
-if not os.path.exists('data/features/'):
-    os.makedirs('data/features/')
-with open('data/features/features.pickle', 'wb') as file:
-    pickle.dump(features, file)
+if not os.path.exists('feature_extraction/data/features/'):
+    os.makedirs('feature_extraction/data/features/')
+
+print(features)
+features.to_csv('feature_extraction/data/features/features.csv', index=True)
