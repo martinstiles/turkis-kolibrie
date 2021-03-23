@@ -7,12 +7,9 @@ import numpy as np
 import time
 from tqdm import tqdm
 
-def add_sentiment(df):
-    for i in tqdm(range(df.shape[0])):
-        index = df.index[i]
-        vader = analyze(df.at[index, "text"])
-        df.at[index, 'vader'] = vader
-    return df
+
+def get_sentiment(df):
+    return df["text"].apply(analyze)
 
 
 def add_topic(df):
@@ -36,7 +33,8 @@ for i, file in enumerate(files):
             map_user_party[user_id] = [i]
         else:
             map_user_party[user_id] += [i]
-
+print(len(map_user_party.keys()))
+exit()
 # transform to binary representation
 for key, value in map_user_party.items():
     map_user_party[key] = [0]*count
@@ -44,15 +42,21 @@ for key, value in map_user_party.items():
         map_user_party[key][index] = 1
 
 
-path = "../feature_extraction/clean/"
+path = "../feature_extraction/clean/original/"
 files = os.listdir(path)
+path_translated = "../feature_extraction/clean/translated/"
+files_translated = os.listdir(path_translated)
+
 topic_classifier = TopicClassifier()
 final_df = pd.DataFrame()
-for file in files:
-    print(files)
+
+
+for file, file_translated in zip(files, files_translated):
+    print(file)
     df = pd.read_csv(os.path.join(path, file), delimiter=",")
-    df = add_sentiment(df)
+    df_translated = pd.read_csv(os.path.join(path_translated, file_translated), delimiter=",", index_col="Unnamed: 0")
     df = add_topic(df)
+    df["vader"] = get_sentiment(df_translated)
     final_df = pd.concat([final_df, df], ignore_index=True)
 final_df = final_df.drop_duplicates(subset=final_df.columns, keep="first")
 final_df.to_csv('final_df.csv', index=True)
