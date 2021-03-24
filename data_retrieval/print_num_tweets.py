@@ -20,7 +20,7 @@ def get_num_spaces(party):
 
 sum_tweets = 0
 for party in SCREEN_NAMES:
-    with open(PATH + "/data/tweets/week_9/" + party + ".json", "r") as file:
+    with open(PATH + "/data/tweets/" + party + ".json", "r") as file:
         tweets = json.load(file)
         num_tweets = len(tweets.keys())
         num_spaces = get_num_spaces(party)
