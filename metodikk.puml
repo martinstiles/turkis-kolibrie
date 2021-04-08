@@ -1,0 +1,27 @@
+@startuml
+' NODES
+database twapi as "Twitter API"
+node clean as "Renseprosess"
+cloud trans as "Google Translate API"
+node senti as "VADER"
+rectangle nrk as "NRK Valgomat"
+rectangle parti1 as "Valgprogramm til partier"
+node clas as "Tema-klassifiserer"
+node tfidf as "TFIDF"
+node user as "Brukeraggregering"
+node ailearn as "Trening av nevralt nettverk"
+node net as "Nevralt nettverk"
+
+' RELATIONSHIPS
+twapi --> clean : Tweets
+trans <- clean : Tweets
+clean --> clas : Tweets
+trans --> senti : Tweets
+senti --> user : Tweets med sentiment
+clas --> user : Tweets med tema
+user --> ailearn : Brukere med tema-sentiment par
+nrk --> tfidf : valgomat-tekst
+parti1 --> tfidf : valgprogramm-tekst
+tfidf --> clas : ordbok for ulike tema
+ailearn -> net
+@enduml
