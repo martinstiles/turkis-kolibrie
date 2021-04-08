@@ -5,7 +5,7 @@ class TopicClassifier():
         self.dictionary = self.set_dictionary()
 
     def set_dictionary(self):
-        with open('creation_of_dictionary/ordbokdata/ordbok/ordbok.pickle', 'rb') as handle:
+        with open('../creation_of_dictionary/ordbokdata/ordbok/ordbok.pickle', 'rb') as handle:
             dictionary = pickle.load(handle)
         return dictionary
 

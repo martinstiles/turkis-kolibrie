@@ -8,7 +8,7 @@ show = False  # print the texts together with the keywords for each text
 stopwords = None
 
 # create list of stopwords
-f = open("ordbokdata/stopwords/stopwords.txt", 'r')
+f = open("/Users/akjen/Documents/NTNU/EiT/turkis-kolibrie/creation_of_dictionary/ordbokdata/stopwords/stopwords.txt", 'r')
 line = f.read().replace('\n', ' ')
 line = ''.join([i for i in line if not i.isdigit()])
 line = line.lower()
@@ -19,7 +19,7 @@ f.close()
 docs = {}
 
 # read all texts from the nrk valgomat
-path = "ordbokdata/valgomat/"
+path = "/Users/akjen/Documents/NTNU/EiT/turkis-kolibrie/creation_of_dictionary/ordbokdata/valgomat/"
 files = os.listdir(path)
 for file in files:
     f=open(os.path.join(path,file), 'r')
@@ -101,4 +101,4 @@ with open('ordbokdata/ordbok/ordbok.pickle', 'wb') as file:
 with open('ordbokdata/ordbok/ordbok.pickle', 'rb') as handle:
     dictionary = pickle.load(handle)
 
-#print(dictionary)
+print(dictionary)

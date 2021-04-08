@@ -55,6 +55,7 @@ def get_responses(filename, user_ids):
     responses = []
     query = BASE_QUERY + "from%3A" + str(user_ids[0])
     counter = 1
+    next_token = ""  # In case it never gets initialized within the for loop
     for user_id in user_ids[1:]:
         new_user = "%20OR%20from%3A" + str(user_id)
         if len(query) + len(new_user) > 480:
@@ -141,10 +142,6 @@ def update_counts(filename, user_ids):
         for party, count in party_to_count_map.items():
             file.write(party + "," + str(count) + "\n")
 
-def check_duplicates(temp):
-    # TODO: Make a method to check if the user id has already been added
-    # SHOULD probably have a dictionary: userId -> tweetIds[]
-    pass
 
 parties_to_skip = [
     # "Arbeiderpartiet",
@@ -153,7 +150,7 @@ parties_to_skip = [
     # "Venstre",
     # "Partiet",
     # "Raudt",
-    "frp_no",
+    # "frp_no",
     # "KrFNorge",
     # "Senterpartiet"
 ]
@@ -166,8 +163,9 @@ def main():
 
         user_ids = get_user_ids(filename)
         # Reduce set to save tweets in batches:
-        # previous run: [:15000]
-        user_ids = user_ids[19900:20600]
+        # previous run: n = 1
+        n = 3
+        user_ids = user_ids[650*(n-1):650*n]
 
         responses = get_responses(filename, user_ids)
 
